@@ -22,3 +22,5 @@
 | nome | foto |
 | -------- | -------- |
 | Diogo Borges |<img src="https://github.com/digogsxd.png" height="75" width="75"> |
+| Lucas Coutinho |<img src="https://github.com/digogsxd.png" height="75" width="75"> |
+| Kaio Lucas |<img src="https://github.com/digogsxd.png" height="75" width="75"> |
