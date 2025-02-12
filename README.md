@@ -16,19 +16,4 @@
 
 ✅ Remoção Segura de Arquivos: Apague arquivos de forma permanente e segura.
 
-🛠️ Instalação
-
-Windows
-
-1️⃣ Baixe o instalador do site oficial.
-2️⃣ Execute o arquivo e siga as instruções do assistente de instalação.
-3️⃣ Inicie o CleanningMaster e comece a otimizar seu PC!
-
-🎯 Como Usar
-
-1️⃣ Abra o CleanningMaster.
-2️⃣ Escolha a funcionalidade desejada (Limpeza, Otimização, etc.).
-3️⃣ Clique no botão Iniciar e aguarde a conclusão do processo.
-4️⃣ Confira os resultados e aplique as melhorias sugeridas.
-
 ⚡ Mantenha seu PC rápido e eficiente com o CleanningMaster! 🚀
