@@ -5,6 +5,7 @@
 🔥 Funcionalidades
 
 ✅ Limpeza de Arquivos Temporários: Remova arquivos indesejados e libere espaço.
+
 ✅ Gerenciamento de Inicialização: Controle quais programas iniciam com o Windows.
 ✅ Verificação de Registro: Corrija erros e melhore a estabilidade.
 ✅ Análise de Espaço em Disco: Encontre arquivos grandes e não utilizados.
