@@ -1,0 +1,60 @@
+site_name: CleanningMaster
+repo_url: https://github.com/DigogSXD/CleanningMaster
+repo_name: CleanningMaster
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+nav:
+  - Início: index.md
+  - Planejamento:
+      - primeiro passo: planeja.md
+  - Entrega 2:
+      - DDL: ddl.md
+      - DML: dml.md
+      - DQL: dql.md
+      - Álgebra Relacional: algebra-relacional.md
+      - Apresentação: apresentacao2.md
+  - Entrega 3:
+      - Triggers e Stored Procedures: triggers.md
+      - Apresentação: apresentacao3.md
+  - Apresentação Final:
+      - Apresentação: apresentacao4.md
+
+theme:
+  name: material
+  language: pt-BR
+  logo: 
+  features:
+    - navigation.instant
+    - navigation.sections 
+    - navigation.top
+    - navigation.tabs
+    - search.suggest
+    - search.highlight
+    - navigation.footer
+  palette:
+    - scheme: default
+      primary: custom
+      toggle:
+        icon: material/weather-night
+        name: Modo noturno
+    - scheme: slate
+      primary: custom 
+      toggle:
+        icon: material/weather-sunny
+        name: Modo claro
+  colors:
+    primary: '#003366'
+  icon:
+    repo: fontawesome/brands/git-alt 
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Requisitos-de-Software/2024.2-Grupo07
+
+plugins:
+  - search
