@@ -1,13 +1,12 @@
 <div align="center">
   <img  src="" height="auto" width="100%"/>
 </div>
+  
+<p>Bem-vindo ao nosso novo software de otimização de PC! Projetado para simplificar sua vida digital, este software limpa seu computador de arquivos desnecessários, liberando espaço e melhorando o desempenho geral do sistema.</p>
 
-Bem-vindo ao nosso novo software de otimização de PC! Projetado para simplificar sua vida digital, este software limpa seu computador de arquivos desnecessários, liberando espaço e melhorando o desempenho geral do sistema. 
+<p>Com apenas alguns cliques, você pode remover arquivos temporários e gerenciar serviços não usados. Diga adeus à lentidão e ao espaço de armazenamento limitado.</p>
 
-Com apenas alguns cliques, você pode remover arquivos temporários e gerenciar serviços não usados. Diga adeus à lentidão e ao espaço de armazenamento limitado 
-
-- nosso software torna seu PC mais rápido e mais limpo, permitindo que você se concentre no que realmente importa.
-
+<p>Nosso software torna seu PC mais rápido e mais limpo, permitindo que você se concentre no que realmente importa.</p>
 
 
 
@@ -18,7 +17,7 @@ Com apenas alguns cliques, você pode remover arquivos temporários e gerenciar 
 
 <div style="display: flex; flex-direction: row; gap: 15px; flex-wrap: wrap; justify-content: center;" >
     <div>
-        <a href="https://github.com/DigogSXD.png">
+        <a href="https://github.com/DigogSXD">
                 <img style="border-radius: 50%;"         src="https://github.com/DigogSXD.png" width="100px;"/>
                 <h5 class="text-center">Diogo Borges de Moura</h5>
         </a>

@@ -11,17 +11,6 @@ nav:
   - Início: index.md
   - Planejamento:
       - primeiro passo: planeja.md
-  - Entrega 2:
-      - DDL: ddl.md
-      - DML: dml.md
-      - DQL: dql.md
-      - Álgebra Relacional: algebra-relacional.md
-      - Apresentação: apresentacao2.md
-  - Entrega 3:
-      - Triggers e Stored Procedures: triggers.md
-      - Apresentação: apresentacao3.md
-  - Apresentação Final:
-      - Apresentação: apresentacao4.md
 
 theme:
   name: material
@@ -54,7 +43,10 @@ theme:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/Requisitos-de-Software/2024.2-Grupo07
+      link: https://github.com/DigogSXD/CleanningMaster
 
 plugins:
   - search
+
+extra_css:
+  - styles.css

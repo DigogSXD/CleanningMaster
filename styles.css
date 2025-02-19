@@ -1,0 +1,34 @@
+p {
+  text-align: justify;
+}
+
+
+/* Estilo para justificar o texto, exceto onde especificamente centralizado */
+.md-content__inner .md-typeset:not(.centralizado) {
+    text-align: justify;
+  }
+  
+  /* Classe para centralizar elementos específicos */
+  .centralizado {
+    text-align: center;
+  }
+  
+  /* Ajuste para títulos */
+  .md-content__inner .md-typeset h1, 
+  .md-content__inner .md-typeset h2, 
+  .md-content__inner .md-typeset h3, 
+  .md-content__inner .md-typeset h4, 
+  .md-content__inner .md-typeset h5, 
+  .md-content__inner .md-typeset h6 {
+    text-align: left;
+  }
+
+
+
+  .center-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
