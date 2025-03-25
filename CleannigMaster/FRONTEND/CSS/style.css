@@ -1,0 +1,55 @@
+body {
+    background-color: #0d1b2a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+}
+
+.navbar, footer {
+    background-color: #1b263b;
+    color: #ffffff;
+}
+
+.navbar .nav-link, .navbar-brand {
+    color: #0476e0;
+}
+
+.navbar .nav-link:hover, .navbar-brand:hover {
+    color: #77a5da;
+    transition: color 0.3s ease;
+}
+.navbar-index {
+    background-color: #1b263b !important;
+    color: #ffffff;
+} 
+
+.btn-primary {
+    background-color: #e63946;
+    border-color: #e63946;
+}
+
+.btn-primary:hover {
+    background-color: #d62839;
+    border-color: #d62839;
+}
+
+h1, h2 {
+    color: #ffffff;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.login-title {
+    font-size: 2.5rem;
+    color: #1d79b6;
+    margin-bottom: 20px;
+}
+
+.login-form {
+    background-color: #1b263b;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
