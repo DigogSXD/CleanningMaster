@@ -12,24 +12,41 @@
 </head>
 <body>
     <!-- Barra de navegação -->
-    <nav class="navbar navbar-expand-lg ">
+    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-        <img src="../static/Logo Cleannmaster.png" alt="Cleannmaster"class="imagem-sobreposta img-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <img src="{{ url_for('static', filename='Logo Cleannmaster.png') }}" alt="Cleannmaster" class="imagem-sobreposta img-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li ><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="UsoDomestico.html">Uso Domestico</a> </li>
-                    <li class="nav-item"><a class="nav-link" href="UsoComercial.html">Uso Comercial</a> </li>
-                    <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre nos</a></li>
-                    <button type="button" class="btn btn-light" onclick="window.location.href='login.html'">Sign in</button>
-                    <button type="button" class="btn btn-dark" onclick="window.location.href='register.html'">Register</button>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('uso_domestico') }}">Uso Doméstico</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('uso_comercial') }}">Uso Comercial</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('sobre') }}">Sobre nós</a>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-light" onclick="window.location.href='{{ url_for('login') }}'">Login</button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-dark" onclick="window.location.href='{{ url_for('register') }}'">Registrar</button>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
+
+
+
+
  <!-- Conteúdo da página -->
  <section class="container mt-5">
     <div class="row">

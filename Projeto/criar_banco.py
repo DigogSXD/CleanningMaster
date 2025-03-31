@@ -15,7 +15,7 @@ def criar_banco_e_tabelas():
             id INT AUTO_INCREMENT PRIMARY KEY,
             nome VARCHAR(100) NOT NULL,
             email VARCHAR(100) NOT NULL UNIQUE,
-            senha VARCHAR(100) NOT NULL
+            senha VARCHAR(255) NOT NULL
         )
     """)
 
@@ -24,7 +24,3 @@ def criar_banco_e_tabelas():
 
     cursor.close()
     conn.close()
-
-# Executa a criação quando rodar o arquivo
-if __name__ == "__main__":
-    criar_banco_e_tabelas()
