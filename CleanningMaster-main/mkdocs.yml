@@ -1,0 +1,58 @@
+site_name: CleanningMaster
+repo_url: https://github.com/DigogSXD/CleanningMaster
+repo_name: CleanningMaster
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+nav:
+  - Início: index.md
+  - Planejamento:
+      - primeiro passo: planeja.md
+  - Documentação Frontend:
+      - Páginas:
+        - Login: login.md
+        - Registro: register.md
+      - Estilos:
+        - CSS: styles.md
+
+theme:
+  name: material
+  language: pt-BR
+  logo: 
+  features:
+    - navigation.instant
+    - navigation.sections 
+    - navigation.top
+    - navigation.tabs
+    - search.suggest
+    - search.highlight
+    - navigation.footer
+  palette:
+    - scheme: default
+      primary: custom
+      toggle:
+        icon: material/weather-night
+        name: Modo noturno
+    - scheme: slate
+      primary: custom 
+      toggle:
+        icon: material/weather-sunny
+        name: Modo claro
+  colors:
+    primary: '#003366'
+  icon:
+    repo: fontawesome/brands/git-alt 
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/DigogSXD/CleanningMaster
+
+plugins:
+  - search
+
+extra_css:
+  - styles.css
