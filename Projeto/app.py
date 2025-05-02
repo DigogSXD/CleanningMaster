@@ -61,15 +61,6 @@ def register():
     
     return render_template('register.html')
 
-# Rotas adicionais para a navegação da navbar
-@app.route('/usodomestico')
-def uso_domestico():
-    return render_template('UsoDomestico.html')
-
-@app.route('/usocomercial')
-def uso_comercial():
-    return render_template('UsoComercial.html')
-
 @app.route('/sobre')
 def sobre():
     return render_template('sobre.html')  # <- Certifique-se que este arquivo está na pasta "templates"
