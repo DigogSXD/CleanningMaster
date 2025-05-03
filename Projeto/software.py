@@ -6,6 +6,7 @@ import mysql.connector
 from tkinter import messagebox, simpledialog
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
+from PIL import Image, ImageTk
 
 
 
@@ -92,10 +93,25 @@ def abrir_login():
 
     login_window = tk.Tk()
     login_window.title("Login - CleanningMaster")
-    login_window.geometry("500x400")  # Janela maior
+    login_window.geometry("500x600")
     login_window.configure(bg=bg_color)
 
-    tk.Label(login_window, text="Login", font=font_title, bg=bg_color, fg=fg_color).pack(pady=20)
+    # Caminho da imagem usando os.path
+    current_dir = os.path.dirname(__file__)
+    img_path = os.path.join(current_dir, "static", "Logo_Cleannmaster.png")
+
+    try:
+        img = Image.open(img_path)
+        img = img.resize((150, 150))
+        img_tk = ImageTk.PhotoImage(img)
+        logo_label = tk.Label(login_window, image=img_tk, bg=bg_color)
+        logo_label.image = img_tk  # mantém referência
+        logo_label.pack(pady=10)
+    except Exception as e:
+        print(f"Erro ao carregar imagem: {e}")
+        messagebox.showerror("Erro ao carregar imagem", str(e))
+
+    tk.Label(login_window, text="Login", font=font_title, bg=bg_color, fg=fg_color).pack(pady=10)
 
     tk.Label(login_window, text="Email:", font=font_label, bg=bg_color, fg=fg_color).pack()
     email_entry = tk.Entry(login_window, font=font_entry, bg=entry_bg, fg=fg_color, width=30)
@@ -152,7 +168,7 @@ def abrir_registro():
 
     registro_window = tk.Tk()
     registro_window.title("Registro")
-    registro_window.geometry("400x400")
+    registro_window.geometry("500x600")  # aumentei a altura para acomodar a imagem
     registro_window.configure(bg=bg_color)
 
     font_title = ("Arial", 20)
@@ -160,19 +176,31 @@ def abrir_registro():
     font_entry = ("Arial", 14)
     font_button = ("Arial", 14)
 
+    # Caminho da imagem usando os.path
+    current_dir = os.path.dirname(__file__)
+    img_path = os.path.join(current_dir, "static", "Logo_Cleannmaster.png")
+
+    try:
+        img = Image.open(img_path)
+        img = img.resize((150, 150))
+        img_tk = ImageTk.PhotoImage(img)
+        logo_label = tk.Label(registro_window, image=img_tk, bg=bg_color)
+        logo_label.image = img_tk  # mantém referência
+        logo_label.pack(pady=10)
+    except Exception as e:
+        print(f"Erro ao carregar imagem: {e}")
+        messagebox.showerror("Erro ao carregar imagem", str(e))
+
     tk.Label(registro_window, text="Registro", font=font_title, bg=bg_color, fg=fg_color).pack(pady=10)
 
-    # Campo Nome
     tk.Label(registro_window, text="Nome:", bg=bg_color, fg=fg_color, font=font_label).pack()
     nome_entry = tk.Entry(registro_window, bg=entry_bg, fg=fg_color, width=30, font=font_entry)
     nome_entry.pack(pady=2)
 
-    # Campo Email
     tk.Label(registro_window, text="Email:", bg=bg_color, fg=fg_color, font=font_label).pack()
     novo_email_entry = tk.Entry(registro_window, bg=entry_bg, fg=fg_color, width=30, font=font_entry)
     novo_email_entry.pack(pady=2)
 
-    # Campo Senha
     tk.Label(registro_window, text="Senha:", bg=bg_color, fg=fg_color, font=font_label).pack()
     nova_senha_entry = tk.Entry(registro_window, show="*", bg=entry_bg, fg=fg_color, width=30, font=font_entry)
     nova_senha_entry.pack(pady=2)
@@ -208,8 +236,6 @@ def abrir_registro():
             messagebox.showerror("Erro", "Email já está registrado.")
         except Exception as e:
             messagebox.showerror("Erro", f"Ocorreu um erro: {e}")
-
-
 
     def voltar_login():
         registro_window.destroy()
