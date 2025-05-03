@@ -1,0 +1,165 @@
+/* Estilos personalizados */
+body {
+    background-color: #1D2029;;
+    color: #3E51B5;
+    font-family: Arial, sans-serif;
+    padding-top: 70px; /* Espaço para compensar a navbar fixa */
+}
+
+.clean{
+    font-family:sans-serif; /* Fonte  */
+    font-size: clamp(1.0rem, 5vw, 3rem); /* Tamanho responsivo */
+    font-weight: bold;
+    color: white; /* Cor do texto */
+    text-shadow: 2px 2px 0px #1D2029; /* Primeira sombra */
+    display: flex;
+    align-items: center;
+}
+
+h2{
+    color: #FFF;
+}
+
+.text-center p{
+    color: #FFF;
+}
+
+/* Cabeçalho claro fixo no topo */
+.navbar {
+    background-color: #3E51B5;
+    color: #1D2029;
+    padding: 15px 20px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1050;
+    border-bottom: 4px solid #1D2029;
+}
+
+.navbar .navbar-toggler {
+    color: #3E51B5;
+    border-color: #3E51B5;
+    margin-left: 10px;
+}
+
+/* Container flexível para o nome e o botão de menu */
+.navbar .navbar-content {
+    display: flex;
+    align-items: center;
+}
+
+/* Ajuste para a imagem do logo */
+.imagem-sobreposta {
+    width: 2000px;
+    height:auto;
+    max-width:60px;
+    margin-right: 0px;
+}
+
+/* Menu lateral escuro */
+.offcanvas {
+    background-color:#1B234C; /* Cor escura para o menu */
+    color: #FFF;
+    margin-top: 78px;
+    transform: translateX(-100%); /* Mova  tela para fora  */
+    transition: transform 1.5s ease; /* Adiciona a transição */
+}
+
+/* Quando o offcanvas está ativo */
+.offcanvas.show {
+    transform: translateX(0); /* Volta para a posição original */
+    visibility: visible; /* Torna o offcanvas visível quando estiver aberto */
+    transform: translateX(-100%);/* Mova  tela para dentro  */
+    transition: transform 1.5s ease; /* Adiciona a transição */
+    
+}
+
+.offcanvas-header {
+    background-color: #1B234C;
+    color: #FFF;
+}
+.offcanvas-body a {
+    color: #FFF;
+    text-decoration: none;
+    display: block;
+    padding: 15px 0;
+    font-weight: bold;
+}
+.offcanvas-body a:hover {
+    background-color: #3E51B5;
+    color: white;
+}
+.offcanvas-body i {
+    margin-right: 15px; /* Espaço entre o ícone e o texto */
+    
+}
+
+.offcanvas-body a:hover i {
+    color: white; /* Cor do ícone ao passar o mouse */
+}
+
+/* Cards */
+.card {
+    background-color: #1D2029;
+    color: #3E51B5;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.card-body {
+    background-color: #3E51B5;
+    color: #000;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.card-title {
+    color: #FFF;
+}
+
+.fa-broom::before{
+    color: #FFF;
+}
+.fa-microchip::before{
+    color: #FFF;
+}
+
+.fa-tachometer-alt:before{
+    color: #FFF;
+}
+
+
+
+/* Seção de Eventos Recentes */
+section.text-center.my-5 {
+    color: #3E51B5;
+    padding: 40px 0;
+    border-radius: 10px;
+}
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .offcanvas {
+        margin-top: 70px;
+    }
+
+    .offcanvas-body a {
+        padding: 10px;
+        font-size: 1rem;
+    }
+}
+
+/* Destaques */
+.bg-yellow {
+    background-color: #3E51B5;
+    padding: 40px;
+    border-radius: 20px;
+}
+
+/* Rodapé */
+footer {
+    background-color: #3E51B5;
+    color: #FFF;
+    padding: 10px;
+}
