@@ -64,6 +64,18 @@ def encerrar_processo():
     else:
         messagebox.showwarning("Não encontrado", f"Nenhum processo com o nome '{nome}' foi encerrado.")
 
+def agendar_desligamento():
+    minutos = simpledialog.askinteger("Agendar Desligamento", "Digite em quantos minutos deseja desligar o PC:")
+    if minutos is not None and minutos > 0:
+        segundos = minutos * 60
+        os.system(f"shutdown /s /t {segundos}")
+        messagebox.showinfo("Agendado", f"Desligamento agendado para {minutos} minuto(s).")
+
+def cancelar_desligamento():
+    os.system("shutdown /a")
+    messagebox.showinfo("Cancelado", "Desligamento agendado foi cancelado.")
+
+
 # Tela principal CleanningMaster
 def abrir_cleanning_master():
     root = tk.Tk()
@@ -76,6 +88,9 @@ def abrir_cleanning_master():
     tk.Button(root, text="🧹 Limpar Arquivos Temporários", command=limpar_temp, width=30, bg=button_bg, fg=fg_color).pack(pady=5)
     tk.Button(root, text="📋 Listar Processos", command=listar_processos, width=30, bg=button_bg, fg=fg_color).pack(pady=5)
     tk.Button(root, text="⛔ Encerrar Processo por Nome", command=encerrar_processo, width=30, bg=button_bg, fg=fg_color).pack(pady=5)
+    tk.Button(root, text="⏲️ Agendar Desligamento", command=agendar_desligamento, width=30, bg=button_bg, fg=fg_color).pack(pady=5)
+    tk.Button(root, text="❌ Cancelar Desligamento", command=cancelar_desligamento, width=30, bg=button_bg, fg=fg_color).pack(pady=5)
+
 
     tk.Label(root, text="Desenvolvido em Python", font=("Arial", 10), bg=bg_color, fg=fg_color).pack(side=tk.BOTTOM, pady=10)
 
