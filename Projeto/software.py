@@ -1363,8 +1363,14 @@ def abrir_registro():
         email = email_entry.get()
         senha = senha_entry.get()
 
+        # Verifica campos vazios
         if not nome or not email or not senha:
             messagebox.showwarning("Campos vazios", "Preencha todos os campos.")
+            return
+
+        # Valida se o email contém @gmail.com
+        if not email.lower().endswith("@gmail.com"):
+            messagebox.showwarning("Email inválido", "O email deve ser um endereço @gmail.com.")
             return
 
         senha_hash = generate_password_hash(senha)
