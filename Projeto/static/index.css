@@ -1,0 +1,94 @@
+/* Estilos personalizados */
+body {
+    background-color: #1D2029;
+    color: #ffff;
+    font-family: Arial, sans-serif;
+    padding-top: 70px; /* Espaço para compensar a navbar fixa */
+}
+
+/* Cabeçalho claro fixo no topo */
+.navbar {
+    background-color: #3E51B5;
+    color: #ffff;
+    padding: 15px 20px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1050;
+}
+
+.nav-link {
+    color: #ffff;
+}
+
+b, strong {
+    font-weight: bolder;
+    color: #ffff;
+}
+
+/* Ajuste para a imagem do logo */
+.imagem-sobreposta {
+    width: 2000px;
+    height: auto;
+    max-width: 60px;
+    margin-right: 0px;
+}
+
+/* Rodapé */
+footer {
+    background-color: #3E51B5;
+    color: #ffff;
+    padding: 10px;
+}
+
+/* Estilos para o carrossel de funcionalidades */
+.features-carousel {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+.feature-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #2A2F3E; /* Tom escuro próximo a #1D2029 */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideFade 12s infinite;
+}
+
+.feature-card:nth-child(1) { animation-delay: 0s; }
+.feature-card:nth-child(2) { animation-delay: 3s; }
+.feature-card:nth-child(3) { animation-delay: 6s; }
+.feature-card:nth-child(4) { animation-delay: 9s; }
+
+.feature-card i {
+    color: #3E51B5; /* Azul da navbar/rodapé para ícones */
+}
+
+.feature-card h3 {
+    color: #ffff; /* Branco para títulos, como <strong> */
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.feature-card p {
+    color: #ffff; /* Branco para texto */
+    font-size: 1rem;
+}
+
+@keyframes slideFade {
+    0% { opacity: 0; transform: translateY(20px); }
+    8% { opacity: 1; transform: translateY(0); }
+    25% { opacity: 1; transform: translateY(0); }
+    33% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 0; transform: translateY(-20px); }
+}

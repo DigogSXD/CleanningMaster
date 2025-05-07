@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Meu Painel</h2>
+    <p><strong>Tipo de Usuário:</strong> {{ tipo_usuario }}</p>
+
+    <h3>Licenças Ativas</h3>
+    {% if licencas_info %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Chave</th>
+                <th>Tipo de Licença</th>
+                <th>Tempo Restante</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for licenca in licencas_info %}
+            <tr>
+                <td>{{ licenca.chave }}</td>
+                <td>{{ licenca.tipo_licenca }}</td>
+                <td>{{ licenca.tempo_restante }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Você não tem licenças ativas.</p>
+    {% endif %}
+</div>
+{% endblock %}

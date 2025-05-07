@@ -1,0 +1,112 @@
+/* Estilos gerais */
+body {
+    background-color: #1D2029;
+    color: #ffff;
+    font-family: Arial, sans-serif;
+    padding-top: 70px; /* Espaço para navbar fixa */
+}
+
+/* Navbar */
+.navbar {
+    background-color: #3E51B5;
+    padding: 15px 20px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1050;
+}
+
+.nav-link, .navbar-brand strong, .btn-link {
+    color: #ffff !important;
+}
+
+/* Seção Sobre Nós */
+.about-section {
+    text-align: center;
+    background-color: #2A2F3E; /* Tom escuro para destaque */
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.about-section h1 {
+    color: #3E51B5; /* Azul para título */
+    margin-bottom: 20px;
+}
+
+.about-section p {
+    color: #ffff;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Seção Equipe */
+.team-section {
+    background-color: #1D2029;
+    padding: 50px 0;
+}
+
+.team-section h2 {
+    color: #3E51B5; /* Azul para título */
+    margin-bottom: 20px;
+}
+
+.team-section p {
+    color: #ffff;
+    max-width: 800px;
+    margin: 0 auto 40px;
+}
+
+.team-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.team-card {
+    background-color: #2A2F3E; /* Tom escuro para cartões */
+    border-radius: 10px;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(62, 81, 181, 0.5); /* Sombra com tom azul */
+}
+
+.team-card img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.team-card h5 {
+    color: #ffff;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+/* Rodapé */
+footer {
+    background-color: #3E51B5;
+    color: #ffff;
+    padding: 20px;
+}
+
+/* Animações */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate {
+    opacity: 0; /* Inicia invisível até a animação ser aplicada */
+}
