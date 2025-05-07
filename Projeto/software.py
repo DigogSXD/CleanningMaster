@@ -10,8 +10,8 @@ import threading
 import math
 import uuid
 from datetime import datetime, date, timedelta
-import webbrowser
 from criar_banco import criar_banco_e_tabelas
+import webbrowser
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("dark-blue")
@@ -41,43 +41,28 @@ def verificar_licenca(usuario_id):
         return None
 
 def ease_in_out(t):
-    """Ease-in-out function for smooth animation (t goes from 0 to 1)."""
     return 0.5 * (1 - math.cos(math.pi * t))
 
 def animate_slide_with_fade(widget, start_pos, end_pos, axis='x', duration=500, delay=0, layout_manager='pack', layout_args=None):
-    """
-    Animates a widget with a smooth slide and fade-in effect.
-    - widget: The widget to animate.
-    - start_pos: Starting position (x or y depending on axis).
-    - end_pos: Ending position.
-    - axis: 'x' or 'y'.
-    - duration: Animation duration in ms.
-    - delay: Delay before starting animation in ms.
-    - layout_manager: 'pack', 'grid', or 'place' to restore widget after animation.
-    - layout_args: Arguments to pass to the layout manager (e.g., {'pady': 5}).
-    """
     if layout_args is None:
         layout_args = {}
 
-    # Set initial position and opacity
     if axis == 'x':
         widget.place(x=start_pos, rely=0.5, anchor='center')
     else:
         widget.place(relx=0.5, y=start_pos, anchor='center')
 
-    # Check if opacity is supported
     opacity_supported = True
     try:
         widget.configure(alpha=0.0)
     except:
         opacity_supported = False
 
-    frames = duration // 10  # 10ms per frame
+    frames = duration // 10
     step = (end_pos - start_pos) / frames if frames > 0 else (end_pos - start_pos)
 
     def animate(current_frame=0):
         if current_frame >= frames:
-            # Animation complete, restore layout
             if layout_manager == 'pack':
                 widget.pack(**layout_args)
             elif layout_manager == 'grid':
@@ -88,12 +73,10 @@ def animate_slide_with_fade(widget, start_pos, end_pos, axis='x', duration=500, 
                 widget.configure(alpha=1.0)
             return
 
-        # Calculate progress (0 to 1) with easing
         progress = ease_in_out(current_frame / frames)
         new_pos = start_pos + (end_pos - start_pos) * progress
         alpha = progress if opacity_supported else 1.0
 
-        # Update position and opacity
         if axis == 'x':
             widget.place(x=new_pos, rely=0.5, anchor='center')
         else:
@@ -106,14 +89,12 @@ def animate_slide_with_fade(widget, start_pos, end_pos, axis='x', duration=500, 
     widget.after(delay, animate)
 
 def interface_agendamentos(frame):
-    # Global state to manage the countdown thread and cancellation
     countdown_thread = None
     is_running = False
     progress_frame = None
     progress_bar = None
     progress_label = None
 
-    # Define variables at the beginning of the function
     acao_var = ctk.StringVar(value="Encerrar")
     tempo_entry = ctk.CTkEntry(frame, placeholder_text="Digite o tempo em minutos", width=200, corner_radius=8)
     cancel_var = ctk.IntVar()
@@ -130,11 +111,9 @@ def interface_agendamentos(frame):
             messagebox.showwarning("Aviso", "Por favor, insira um valor numérico válido para o tempo.")
             return
 
-        # Convert minutes to seconds
         segundos = int(minutos * 60)
         acao_str = {"Encerrar": "Encerramento", "Hibernar": "Hibernação", "Reiniciar": "Reinicialização"}[acao]
 
-        # Create progress frame
         progress_frame = ctk.CTkFrame(frame, corner_radius=10)
         progress_frame.pack(fill="x", pady=10, padx=20)
         
@@ -146,7 +125,7 @@ def interface_agendamentos(frame):
         progress_bar.set(0)
 
         is_running = True
-        cancel_var.set(0)  # Reset checkbox
+        cancel_var.set(0)
 
         def executar_contagem():
             nonlocal is_running
@@ -161,7 +140,6 @@ def interface_agendamentos(frame):
                     progress_bar.set(1)
                     progress_label.configure(text=f"{acao_str} concluído!")
                     
-                    # Execute the selected action
                     try:
                         if acao == "Encerrar":
                             os.system(f"shutdown /s /t 1")
@@ -181,12 +159,10 @@ def interface_agendamentos(frame):
                 frame.update()
                 time.sleep(0.1)
 
-            # Reset UI after completion or cancellation
             if not is_running and progress < 1:
                 progress_label.configure(text="Agendamento cancelado.")
                 progress_bar.set(0)
 
-        # Start the countdown in a separate thread
         countdown_thread = threading.Thread(target=executar_contagem, daemon=True)
         countdown_thread.start()
 
@@ -200,43 +176,36 @@ def interface_agendamentos(frame):
             messagebox.showwarning("Aviso", "Por favor, marque a caixa de seleção para confirmar o cancelamento.")
             return
 
-        # Stop the countdown thread
         is_running = False
         if countdown_thread:
-            countdown_thread.join()  # Wait for the thread to finish
+            countdown_thread.join()
 
-        # Cancel any scheduled shutdown or restart
         try:
-            os.system("shutdown /a")  # Abort any scheduled shutdown/restart
+            os.system("shutdown /a")
         except Exception as e:
             messagebox.showerror("Erro", f"Falha ao cancelar agendamento: {e}")
             return
 
         messagebox.showinfo("Sucesso", "Agendamento cancelado com sucesso.")
-        cancel_var.set(0)  # Reset checkbox
+        cancel_var.set(0)
 
-    # Interface elements
     titulo = ctk.CTkLabel(frame, text="⏰ Agendamentos", font=("Arial", 18, "bold"))
     animate_slide_with_fade(titulo, -200, 0, axis='y', delay=100, layout_args={'pady': 20})
 
-    # Action selection
     acao_label = ctk.CTkLabel(frame, text="Selecione a ação:", font=("Arial", 14))
     animate_slide_with_fade(acao_label, -300, 0, axis='x', delay=150, layout_args={'pady': 5})
 
     acao_menu = ctk.CTkOptionMenu(frame, values=["Encerrar", "Hibernar", "Reiniciar"], variable=acao_var, width=200, corner_radius=8)
     animate_slide_with_fade(acao_menu, -300, 0, axis='x', delay=200, layout_args={'pady': 10})
 
-    # Time input
     tempo_label = ctk.CTkLabel(frame, text="Tempo (minutos):", font=("Arial", 14))
     animate_slide_with_fade(tempo_label, -300, 0, axis='x', delay=250, layout_args={'pady': 5})
 
     animate_slide_with_fade(tempo_entry, -300, 0, axis='x', delay=300, layout_args={'pady': 10})
 
-    # Schedule button
     btn_agendar = ctk.CTkButton(frame, text="Agendar ⏳", command=agendar_acao, width=200, corner_radius=8, font=("Arial", 14))
     animate_slide_with_fade(btn_agendar, -300, 0, axis='x', delay=350, layout_args={'pady': 10})
 
-    # Cancel checkbox and button
     cancel_checkbox = ctk.CTkCheckBox(frame, text="Confirmar cancelamento", variable=cancel_var, font=("Arial", 14))
     animate_slide_with_fade(cancel_checkbox, -300, 0, axis='x', delay=400, layout_args={'pady': 5})
 
@@ -328,20 +297,18 @@ def interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio):
                 proc_info['memory_mb'] = proc_info['memory_info'].rss / 1024 / 1024
                 proc_info['cpu_time'] = proc_info['cpu_times'].user + proc_info['cpu_times'].system
                 batch.append(proc_info)
-                print(f"Processo encontrado: {proc_info['name']} (PID: {proc_info['pid']})")  # Debug print
-                if len(batch) >= 15:  # Yield a batch of 15 processes
+                if len(batch) >= 15:
                     yield batch
                     batch = []
             except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
                 continue
-        if batch:  # Yield any remaining processes
+        if batch:
             yield batch
 
     def atualizar_lista_processos(scroll_frame):
         for widget in scroll_frame.winfo_children():
             widget.destroy()
         
-        # Header row
         header_frame = ctk.CTkFrame(scroll_frame, fg_color="#14375e", corner_radius=8)
         header_frame.pack(fill="x", pady=5, padx=5)
         
@@ -364,14 +331,12 @@ def interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio):
                 label.configure(cursor="hand2")
                 label.bind("<Button-1>", lambda e, key=col_key: sort_by_column(key))
         
-        # Keep track of all processes for sorting
         all_processos = []
         
         def load_batch(processos, start_index):
             nonlocal all_processos
             all_processos.extend(processos)
             
-            # Sort processes
             if sort_column == "name":
                 all_processos.sort(key=lambda x: x['name'].lower(), reverse=sort_reverse)
             elif sort_column == "cpu_percent":
@@ -379,17 +344,14 @@ def interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio):
             elif sort_column == "memory_mb":
                 all_processos.sort(key=lambda x: x['memory_mb'], reverse=not sort_reverse)
             
-            # Clear and re-display all processes
             for widget in scroll_frame.winfo_children():
                 if widget != header_frame:
                     widget.destroy()
             
             if not all_processos:
                 ctk.CTkLabel(scroll_frame, text="Nenhum processo encontrado.", font=("Arial", 14)).pack(pady=20)
-                print("Nenhum processo encontrado.")  # Debug print
                 return
             
-            # Display all processes
             for i, proc in enumerate(all_processos):
                 row_frame = ctk.CTkFrame(scroll_frame, fg_color="#2b2b2b", corner_radius=8)
                 
@@ -428,7 +390,6 @@ def interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio):
                 details_btn.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
                 row_frame.grid_columnconfigure(7, weight=10, uniform="row")
                 
-                # Hover effect for row
                 def on_row_enter(e):
                     row_frame.configure(fg_color="#1f6aa5")
                 
@@ -441,7 +402,6 @@ def interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio):
                     child.bind("<Enter>", on_row_enter)
                     child.bind("<Leave>", on_row_leave)
                 
-                # No animation, just pack the row
                 row_frame.pack(fill='x', pady=2, padx=5)
 
         def load_processes():
@@ -451,8 +411,8 @@ def interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio):
                 for batch in process_generator:
                     scroll_frame.after(0, load_batch, batch, start_index)
                     start_index += len(batch)
-                    scroll_frame.update()  # Force UI update after each batch
-                    time.sleep(0.1)  # Small delay to allow UI to catch up
+                    scroll_frame.update()
+                    time.sleep(0.1)
             except Exception as e:
                 print(f"Erro ao carregar processos: {e}")
 
@@ -474,7 +434,6 @@ def interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio):
         main_frame = ctk.CTkFrame(frame, fg_color="transparent")
         main_frame.pack(fill="both", expand=True)
         
-        # Back button
         btn_voltar = ctk.CTkButton(main_frame, text="⬅️ Voltar", 
                                  command=lambda: atualizar_conteudo(lambda frame: interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio)),
                                  corner_radius=8)
@@ -482,7 +441,6 @@ def interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio):
         btn_voltar.bind("<Enter>", lambda e: e.widget.configure(fg_color="#1f6aa5"))
         btn_voltar.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
         
-        # Process info
         info_frame = ctk.CTkFrame(main_frame, corner_radius=10)
         info_frame.pack(pady=10, padx=20, fill="x")
         
@@ -491,11 +449,9 @@ def interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio):
         ctk.CTkLabel(info_frame, text=f"👤 Usuário: {processo['username'] or 'N/A'}", font=("Arial", 14)).pack(anchor="w", padx=10, pady=5)
         ctk.CTkLabel(info_frame, text=f"⏳ Status: {processo['status']}", font=("Arial", 14)).pack(anchor="w", padx=10, pady=5)
         
-        # Gauges
         medidores_frame = ctk.CTkFrame(main_frame, corner_radius=10)
         medidores_frame.pack(pady=10, padx=20, fill="x")
         
-        # CPU
         cpu_frame = ctk.CTkFrame(medidores_frame, corner_radius=8)
         cpu_frame.pack(side="left", expand=True, padx=10)
         ctk.CTkLabel(cpu_frame, text="Uso de CPU", font=("Arial", 14)).pack(pady=5)
@@ -504,7 +460,6 @@ def interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio):
         cpu_label = ctk.CTkLabel(cpu_frame, text="0%", font=("Arial", 12))
         cpu_label.pack(pady=5)
         
-        # Memory
         mem_frame = ctk.CTkFrame(medidores_frame, corner_radius=8)
         mem_frame.pack(side="left", expand=True, padx=10)
         ctk.CTkLabel(mem_frame, text="Uso de Memória", font=("Arial", 14)).pack(pady=5)
@@ -513,7 +468,6 @@ def interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio):
         mem_label = ctk.CTkLabel(mem_frame, text="0 MB", font=("Arial", 12))
         mem_label.pack(pady=5)
         
-        # Controls
         controles_frame = ctk.CTkFrame(main_frame, corner_radius=10)
         controles_frame.pack(pady=10, padx=20, fill="x")
         
@@ -613,7 +567,6 @@ def interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio):
     btn_atualizar.bind("<Enter>", lambda e: e.widget.configure(fg_color="#1f6aa5"))
     btn_atualizar.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
 
-    # Voltar button in bottom-right corner
     btn_voltar = ctk.CTkButton(frame, text="Voltar ⬅️", 
                               command=lambda: atualizar_conteudo(mostrar_inicio),
                               corner_radius=8, font=("Arial", 14))
@@ -626,7 +579,6 @@ def interface_listar_processos(frame, atualizar_conteudo, mostrar_inicio):
 
 def interface_suporte(frame, usuario_id, nome_usuario, is_admin, atualizar_conteudo, mostrar_inicio):
     def contar_admins_online():
-        # Simulação de admins online (já que não temos um sistema real de "online")
         try:
             conn = mysql.connector.connect(
                 host="localhost",
@@ -639,8 +591,7 @@ def interface_suporte(frame, usuario_id, nome_usuario, is_admin, atualizar_conte
             total_admins = cursor.fetchone()[0]
             cursor.close()
             conn.close()
-            # Simulando que 50% dos admins estão online
-            return max(1, total_admins // 2)  # Garante pelo menos 1 admin online
+            return max(1, total_admins // 2)
         except Exception as e:
             print(f"Erro ao contar admins: {e}")
             return 1
@@ -700,13 +651,36 @@ def interface_suporte(frame, usuario_id, nome_usuario, is_admin, atualizar_conte
             messagebox.showerror("Erro", f"Erro ao enviar mensagem: {e}")
 
     def interface_chat_premium():
-        chat_id = f"chat_{usuario_id}"  # Cada usuário premium tem seu próprio chat
+        chat_id = f"chat_{usuario_id}"
         chat_frame = ctk.CTkFrame(frame, corner_radius=10)
         chat_frame.pack(fill="both", expand=True, pady=10, padx=20)
 
+        try:
+            conn = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                password="12345678",
+                database="cleannmaster"
+            )
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute("""
+                SELECT COUNT(*) as new_messages
+                FROM chat_mensagens
+                WHERE chat_id = %s AND is_admin = TRUE AND timestamp > (
+                    SELECT MAX(timestamp) FROM chat_mensagens WHERE usuario_id = %s AND is_admin = FALSE
+                )
+            """, (chat_id, usuario_id))
+            new_messages = cursor.fetchone()['new_messages']
+            cursor.close()
+            conn.close()
+            if new_messages > 0:
+                messagebox.showinfo("Notificação", "Você recebeu uma nova resposta de um administrador!")
+        except Exception as e:
+            print(f"Erro ao verificar novas mensagens: {e}")
+
         chat_area = ctk.CTkTextbox(chat_frame, height=300, corner_radius=8, state="disabled")
         chat_area.pack(fill="both", expand=True, pady=5)
-        chat_area.configure(state="normal")  # Enable to insert messages
+        chat_area.configure(state="normal")
 
         mensagem_entry = ctk.CTkEntry(chat_frame, placeholder_text="Digite sua mensagem...", width=400, corner_radius=8)
         mensagem_entry.pack(side="left", pady=5, padx=5)
@@ -716,7 +690,6 @@ def interface_suporte(frame, usuario_id, nome_usuario, is_admin, atualizar_conte
         btn_enviar.bind("<Enter>", lambda e: e.widget.configure(fg_color="#1f6aa5"))
         btn_enviar.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
 
-        # Auto-refresh chat every 5 seconds
         def atualizar_chat():
             carregar_mensagens(chat_id, chat_area)
             frame.after(5000, atualizar_chat)
@@ -734,7 +707,6 @@ def interface_suporte(frame, usuario_id, nome_usuario, is_admin, atualizar_conte
                     database="cleannmaster"
                 )
                 cursor = conn.cursor(dictionary=True)
-                # Get all chats from premium users
                 cursor.execute("""
                     SELECT DISTINCT cm.chat_id, u.nome 
                     FROM chat_mensagens cm 
@@ -796,7 +768,6 @@ def interface_suporte(frame, usuario_id, nome_usuario, is_admin, atualizar_conte
         ctk.CTkLabel(chats_frame, text="Chats Ativos", font=("Arial", 16, "bold")).pack(pady=10)
         carregar_chats()
 
-    # Interface principal do suporte
     titulo = ctk.CTkLabel(frame, text="💬 Suporte", font=("Arial", 18, "bold"))
     animate_slide_with_fade(titulo, -200, 0, axis='y', delay=100, layout_args={'pady': 20})
 
@@ -809,7 +780,171 @@ def interface_suporte(frame, usuario_id, nome_usuario, is_admin, atualizar_conte
     else:
         interface_chat_premium()
 
-    # Voltar button
+    btn_voltar = ctk.CTkButton(frame, text="Voltar ⬅️", 
+                              command=lambda: atualizar_conteudo(mostrar_inicio),
+                              corner_radius=8, font=("Arial", 14))
+    btn_voltar.pack(side="bottom", anchor="se", padx=10, pady=10)
+    btn_voltar.bind("<Enter>", lambda e: e.widget.configure(fg_color="#1f6aa5"))
+    btn_voltar.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
+
+def interface_admin(frame, usuario_id, atualizar_conteudo, mostrar_inicio):
+    def gerar_chave():
+        tipo_var = tipo_chave.get()
+        chave = str(uuid.uuid4()).replace("-", "").upper()[:16]
+        data_expiracao = None
+        if tipo_var == "30 Dias":
+            data_expiracao = datetime.now() + timedelta(days=30)
+        elif tipo_var == "90 Dias":
+            data_expiracao = datetime.now() + timedelta(days=90)
+        elif tipo_var == "Vitalícia":
+            data_expiracao = None
+
+        try:
+            conn = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                password="12345678",
+                database="cleannmaster"
+            )
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO chaves (chave, tipo_licenca, data_expiracao, ativa, usada, usada_por, email_usuario, data_ativacao)
+                VALUES (%s, %s, %s, TRUE, FALSE, NULL, NULL, NULL)
+            """, (chave, tipo_var, data_expiracao))
+            conn.commit()
+            cursor.close()
+            conn.close()
+            messagebox.showinfo("Sucesso", f"Chave gerada: {chave}")
+            chave_entry.delete(0, "end")
+            chave_entry.insert(0, chave)
+        except Exception as e:
+            messagebox.showerror("Erro", f"Erro ao gerar chave: {e}")
+
+    def pesquisar_usuario():
+        email = email_pesquisa_entry.get().strip()
+        if not email:
+            messagebox.showwarning("Aviso", "Por favor, insira um email.")
+            return
+
+        try:
+            conn = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                password="12345678",
+                database="cleannmaster"
+            )
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute("SELECT id, nome, email, tipo_usuario, permissao FROM usuarios WHERE email = %s", (email,))
+            usuario = cursor.fetchone()
+            cursor.close()
+            conn.close()
+
+            for widget in resultado_frame.winfo_children():
+                widget.destroy()
+
+            if usuario:
+                usuario_frame = ctk.CTkFrame(resultado_frame, corner_radius=10)
+                usuario_frame.pack(fill="x", pady=5, padx=10)
+                ctk.CTkLabel(usuario_frame, text=f"Nome: {usuario['nome']}", font=("Arial", 14)).pack(anchor="w", pady=2)
+                ctk.CTkLabel(usuario_frame, text=f"Email: {usuario['email']}", font=("Arial", 14)).pack(anchor="w", pady=2)
+                ctk.CTkLabel(usuario_frame, text=f"Tipo: {usuario['tipo_usuario']}", font=("Arial", 14)).pack(anchor="w", pady=2)
+                ctk.CTkLabel(usuario_frame, text=f"Permissão: {'Admin' if usuario['permissao'] == 1 else 'Normal'}", font=("Arial", 14)).pack(anchor="w", pady=2)
+
+                def adicionar_licenca():
+                    tipo_var = tipo_licenca_adicionar.get()
+                    data_expiracao = None
+                    if tipo_var == "30 Dias":
+                        data_expiracao = datetime.now() + timedelta(days=30)
+                    elif tipo_var == "90 Dias":
+                        data_expiracao = datetime.now() + timedelta(days=90)
+                    elif tipo_var == "Vitalícia":
+                        data_expiracao = None
+
+                    chave = str(uuid.uuid4()).replace("-", "").upper()[:16]
+                    try:
+                        conn = mysql.connector.connect(
+                            host="localhost",
+                            user="root",
+                            password="12345678",
+                            database="cleannmaster"
+                        )
+                        cursor = conn.cursor()
+                        cursor.execute("""
+                            INSERT INTO chaves (chave, tipo_licenca, data_expiracao, ativa, usada, usada_por, email_usuario, data_ativacao)
+                            VALUES (%s, %s, %s, TRUE, TRUE, %s, %s, NOW())
+                        """, (chave, tipo_var, data_expiracao, usuario['id'], usuario['email']))
+                        cursor.execute("""
+                            UPDATE usuarios SET tipo_usuario = 'premium', data_expiracao = %s WHERE id = %s
+                        """, (data_expiracao, usuario['id']))
+                        conn.commit()
+                        cursor.close()
+                        conn.close()
+                        messagebox.showinfo("Sucesso", f"Licença adicionada para {usuario['nome']} com chave: {chave}")
+                    except Exception as e:
+                        messagebox.showerror("Erro", f"Erro ao adicionar licença: {e}")
+
+                def remover_licenca():
+                    try:
+                        conn = mysql.connector.connect(
+                            host="localhost",
+                            user="root",
+                            password="12345678",
+                            database="cleannmaster"
+                        )
+                        cursor = conn.cursor()
+                        cursor.execute("UPDATE chaves SET ativa = FALSE, usada = FALSE, usada_por = NULL, email_usuario = NULL WHERE usada_por = %s", (usuario['id'],))
+                        cursor.execute("UPDATE usuarios SET tipo_usuario = 'free', data_expiracao = NULL WHERE id = %s", (usuario['id'],))
+                        conn.commit()
+                        cursor.close()
+                        conn.close()
+                        messagebox.showinfo("Sucesso", f"Licença removida de {usuario['nome']}")
+                        for widget in resultado_frame.winfo_children():
+                            widget.destroy()
+                        pesquisar_usuario()
+                    except Exception as e:
+                        messagebox.showerror("Erro", f"Erro ao remover licença: {e}")
+
+                tipo_licenca_adicionar = ctk.StringVar(value="30 Dias")
+                ctk.CTkLabel(usuario_frame, text="Adicionar Licença:", font=("Arial", 14)).pack(anchor="w", pady=2)
+                ctk.CTkOptionMenu(usuario_frame, values=["30 Dias", "90 Dias", "Vitalícia"], variable=tipo_licenca_adicionar).pack(anchor="w", pady=2)
+                btn_adicionar = ctk.CTkButton(usuario_frame, text="Adicionar Licença", command=adicionar_licenca, corner_radius=8)
+                btn_adicionar.pack(anchor="w", pady=2)
+                btn_adicionar.bind("<Enter>", lambda e: e.widget.configure(fg_color="#1f6aa5"))
+                btn_adicionar.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
+
+                btn_remover = ctk.CTkButton(usuario_frame, text="Remover Licença", command=remover_licenca, corner_radius=8)
+                btn_remover.pack(anchor="w", pady=2)
+                btn_remover.bind("<Enter>", lambda e: e.widget.configure(fg_color="#1f6aa5"))
+                btn_remover.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
+            else:
+                ctk.CTkLabel(resultado_frame, text="Usuário não encontrado.", font=("Arial", 14)).pack(pady=10)
+        except Exception as e:
+            messagebox.showerror("Erro", f"Erro ao pesquisar usuário: {e}")
+
+    titulo = ctk.CTkLabel(frame, text="👑 Painel de Administração", font=("Arial", 18, "bold"))
+    animate_slide_with_fade(titulo, -200, 0, axis='y', delay=100, layout_args={'pady': 20})
+
+    tipo_chave = ctk.StringVar(value="30 Dias")
+    ctk.CTkLabel(frame, text="Gerar Chave de Licença:", font=("Arial", 14)).pack(pady=5)
+    ctk.CTkOptionMenu(frame, values=["30 Dias", "90 Dias", "Vitalícia"], variable=tipo_chave).pack(pady=5)
+    chave_entry = ctk.CTkEntry(frame, placeholder_text="Chave será exibida aqui", width=200, corner_radius=8)
+    chave_entry.pack(pady=5)
+    btn_gerar = ctk.CTkButton(frame, text="Gerar Chave", command=gerar_chave, corner_radius=8)
+    btn_gerar.pack(pady=10)
+    btn_gerar.bind("<Enter>", lambda e: e.widget.configure(fg_color="#1f6aa5"))
+    btn_gerar.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
+
+    ctk.CTkLabel(frame, text="Pesquisar Usuário por Email:", font=("Arial", 14)).pack(pady=5)
+    email_pesquisa_entry = ctk.CTkEntry(frame, placeholder_text="Digite o email", width=200, corner_radius=8)
+    email_pesquisa_entry.pack(pady=5)
+    btn_pesquisar = ctk.CTkButton(frame, text="Pesquisar", command=pesquisar_usuario, corner_radius=8)
+    btn_pesquisar.pack(pady=10)
+    btn_pesquisar.bind("<Enter>", lambda e: e.widget.configure(fg_color="#1f6aa5"))
+    btn_pesquisar.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
+
+    resultado_frame = ctk.CTkScrollableFrame(frame, height=300, corner_radius=10)
+    resultado_frame.pack(fill="both", expand=True, pady=10, padx=20)
+
     btn_voltar = ctk.CTkButton(frame, text="Voltar ⬅️", 
                               command=lambda: atualizar_conteudo(mostrar_inicio),
                               corner_radius=8, font=("Arial", 14))
@@ -858,7 +993,11 @@ def interface_suporte_remoto(frame, atualizar_conteudo, mostrar_inicio):
     btn_voltar.bind("<Enter>", on_enter)
     btn_voltar.bind("<Leave>", on_leave)
 
-def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, licenca):
+
+def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, licenca, root=None):
+    if root:
+        root.destroy()
+
     root = ctk.CTk()
     root.title("CleanningMaster 💼")
     root.geometry("900x600")
@@ -866,12 +1005,10 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
     root.grid_rowconfigure(0, weight=1)
     root.grid_columnconfigure(1, weight=1)
 
-    # Sidebar with gradient-like styling
     sidebar = ctk.CTkFrame(root, width=200, corner_radius=10, fg_color="#1a2634")
     sidebar.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
-    sidebar.grid_rowconfigure(7, weight=1)  # Adjusted to accommodate new button
+    sidebar.grid_rowconfigure(6, weight=1)
 
-    # Content area
     content_frame = ctk.CTkFrame(root, corner_radius=10)
     content_frame.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
 
@@ -883,7 +1020,6 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
         funcao(frame)
         animate_slide_with_fade(content_frame, -900, 0, axis='x', delay=0, layout_manager='grid', layout_args={'row': 0, 'column': 1, 'sticky': 'nsew', 'padx': 10, 'pady': 10})
 
-    # Sidebar buttons with scale animation and shadow
     def criar_botao_sidebar(texto, comando, posicao):
         btn = ctk.CTkButton(
             sidebar, text=texto, command=comando, corner_radius=8, height=40,
@@ -891,25 +1027,21 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
             font=("Arial", 14), border_width=2, border_color="#2b2b2b"
         )
         
-        # Store original dimensions
         btn.original_width = btn.winfo_reqwidth()
         btn.original_height = btn.winfo_reqheight()
-        scale_factor = 1.05  # Scaling factor for hover effect
+        scale_factor = 1.05
 
         def on_enter(e):
             btn.configure(fg_color="#1f6aa5", border_color="#1f6aa5")
-            # Apply scaling relative to original size
             btn.configure(width=int(btn.original_width * scale_factor), height=int(btn.original_height * scale_factor))
 
         def on_leave(e):
             btn.configure(fg_color="#14375e", border_color="#2b2b2b")
-            # Reset to original size
             btn.configure(width=btn.original_width, height=btn.original_height)
 
         btn.bind("<Enter>", on_enter)
         btn.bind("<Leave>", on_leave)
         
-        # Slide-in animation
         animate_slide_with_fade(
             btn, -200, 0, axis='x', delay=100 + posicao * 100,
             layout_manager='grid',
@@ -917,7 +1049,6 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
         )
         return btn
 
-    # Conditionally create sidebar buttons based on user type
     posicao = 0
     btn_limpar = criar_botao_sidebar("🧹 Limpar Temporários", lambda: atualizar_conteudo(lambda frame: interface_limpar_temp(frame)), posicao)
     posicao += 1
@@ -928,10 +1059,12 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
         posicao += 1
         btn_suporte = criar_botao_sidebar("💬 Suporte", lambda: atualizar_conteudo(lambda frame: interface_suporte(frame, usuario_id, nome_usuario, "Admin" in status, atualizar_conteudo, mostrar_inicio)), posicao)
         posicao += 1
+        if "Admin" in status:
+            btn_admin = criar_botao_sidebar("👑 Administração", lambda: atualizar_conteudo(lambda frame: interface_admin(frame, usuario_id, atualizar_conteudo, mostrar_inicio)), posicao)
+            posicao += 1
         btn_suporte_remoto = criar_botao_sidebar("🖥️ Suporte Remoto", lambda: atualizar_conteudo(lambda frame: interface_suporte_remoto(frame, atualizar_conteudo, mostrar_inicio)), posicao)
         posicao += 1
 
-    # Footer with logout confirmation
     rodape = ctk.CTkFrame(root, height=40, fg_color="#1a2634")
     rodape.grid(row=1, column=0, columnspan=2, sticky="ew")
     rodape.grid_columnconfigure(0, weight=1)
@@ -942,12 +1075,12 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
     def confirm_logout():
         if messagebox.askyesno("Confirmação", "Deseja realmente sair?"):
             root.destroy()
+            abrir_login()
 
     logout_btn = ctk.CTkButton(rodape, text="Sair 🔓", command=confirm_logout, width=100, corner_radius=8, fg_color="#14375e", hover_color="#1f6aa5")
     logout_btn.pack(side="right", padx=10)
 
     def mostrar_perfil():
-        # Fetch user permission to determine type (Normal or Admin)
         try:
             conn = mysql.connector.connect(
                 host="localhost",
@@ -981,13 +1114,10 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
         ctk.CTkLabel(info_frame, text=f"💼 Status: {status}", font=("Arial", 14)).pack(anchor="w", pady=5, padx=10)
         ctk.CTkLabel(info_frame, text=f"👥 Tipo de Usuário: {tipo_usuario}", font=("Arial", 14)).pack(anchor="w", pady=5, padx=10)
         
-        # Display license information if available
         if licenca:
-            # Censor the middle part of the key
             chave = licenca['chave']
             censored_chave = f"{chave[:4]}****{chave[-4:]}"
             
-            # Calculate remaining days and total duration
             data_ativacao = licenca['data_ativacao']
             data_expiracao = licenca['data_expiracao']
             hoje = datetime.now().date()
@@ -1048,7 +1178,6 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
 
                     messagebox.showinfo("Sucesso", f"Chave ativada com sucesso! Últimos 4 dígitos: {ultimos_digitos}. Licença: {tipo_licenca}. Expiração: {data_expiracao_formatada}.")
                     root.destroy()
-                    # Re-open with updated status
                     licenca_nova = verificar_licenca(usuario_id)
                     abrir_cleanning_master(nome_usuario, "💎 Premium", usuario_id, email, True, licenca_nova)
                 
@@ -1082,12 +1211,10 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
         ctk.CTkLabel(frame, text="🖥️ CleanningMaster", font=("Arial", 24, "bold")).pack(pady=20)
         ctk.CTkLabel(frame, text="Bem-vindo ao seu gerenciador de sistema", font=("Arial", 16)).pack(pady=10)
         
-        # System stats dashboard
         stats_frame = ctk.CTkFrame(frame, corner_radius=10)
         stats_frame.pack(pady=20, padx=20, fill="x")
         stats_frame.grid_columnconfigure((0, 1, 2, 3), weight=1)
         
-        # CPU Usage
         cpu_frame = ctk.CTkFrame(stats_frame, corner_radius=8)
         cpu_frame.grid(row=0, column=0, padx=10, pady=5, sticky="nsew")
         ctk.CTkLabel(cpu_frame, text="CPU Usage", font=("Arial", 14)).pack(pady=5)
@@ -1096,7 +1223,6 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
         cpu_label = ctk.CTkLabel(cpu_frame, text="0%", font=("Arial", 12))
         cpu_label.pack()
         
-        # Memory Usage
         mem_frame = ctk.CTkFrame(stats_frame, corner_radius=8)
         mem_frame.grid(row=0, column=1, padx=10, pady=5, sticky="nsew")
         ctk.CTkLabel(mem_frame, text="Memory Usage", font=("Arial", 14)).pack(pady=5)
@@ -1105,7 +1231,6 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
         mem_label = ctk.CTkLabel(mem_frame, text="0%", font=("Arial", 12))
         mem_label.pack()
         
-        # Disk Usage
         disk_frame = ctk.CTkFrame(stats_frame, corner_radius=8)
         disk_frame.grid(row=0, column=2, padx=10, pady=5, sticky="nsew")
         ctk.CTkLabel(disk_frame, text="Disk Usage", font=("Arial", 14)).pack(pady=5)
@@ -1114,7 +1239,6 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
         disk_label = ctk.CTkLabel(disk_frame, text="0%", font=("Arial", 12))
         disk_label.pack()
         
-        # Running Processes
         proc_frame = ctk.CTkFrame(stats_frame, corner_radius=8)
         proc_frame.grid(row=0, column=3, padx=10, pady=5, sticky="nsew")
         ctk.CTkLabel(proc_frame, text="Running Processes", font=("Arial", 14)).pack(pady=5)
@@ -1150,6 +1274,10 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
     root.mainloop()
 
 def abrir_login():
+    login_window = ctk.CTk()
+    login_window.title("Login - CleanningMaster")
+    login_window.geometry("400x500")
+
     def fazer_login():
         email_ou_nome = email_entry.get()
         senha = senha_entry.get()
@@ -1166,12 +1294,10 @@ def abrir_login():
             usuario = cursor.fetchone()
 
             if usuario and check_password_hash(usuario['senha'], senha):
-                # Initialize license details
                 licenca = verificar_licenca(usuario['id'])
                 status = "⚙️ Free"
                 is_premium = False
 
-                # Check user permissions
                 if usuario['permissao'] == 1:
                     status = "👑 Admin"
                 elif usuario['tipo_usuario'] == 'premium' and (not usuario['data_expiracao'] or usuario['data_expiracao'] >= date.today()):
@@ -1194,10 +1320,6 @@ def abrir_login():
     def ir_para_registro():
         login_window.destroy()
         abrir_registro()
-
-    login_window = ctk.CTk()
-    login_window.title("Login - CleanningMaster")
-    login_window.geometry("400x500")
 
     frame = ctk.CTkFrame(login_window, corner_radius=10)
     frame.pack(pady=20, padx=20, fill="both", expand=True)
@@ -1232,6 +1354,10 @@ def abrir_login():
     login_window.mainloop()
 
 def abrir_registro():
+    registro_window = ctk.CTk()
+    registro_window.title("Registro - CleanningMaster")
+    registro_window.geometry("400x550")
+
     def registrar():
         nome = nome_entry.get()
         email = email_entry.get()
@@ -1252,7 +1378,6 @@ def abrir_registro():
             )
             cursor = conn.cursor()
 
-            # Check if username already exists
             cursor.execute("SELECT COUNT(*) FROM usuarios WHERE nome = %s", (nome,))
             nome_existe = cursor.fetchone()[0]
             if nome_existe > 0:
@@ -1281,10 +1406,6 @@ def abrir_registro():
         registro_window.destroy()
         abrir_login()
 
-    registro_window = ctk.CTk()
-    registro_window.title("Registro - CleanningMaster")
-    registro_window.geometry("400x550")
-
     frame = ctk.CTkFrame(registro_window, corner_radius=10)
     frame.pack(pady=20, padx=20, fill="both", expand=True)
 
@@ -1312,12 +1433,14 @@ def abrir_registro():
     registrar_btn.bind("<Enter>", on_enter)
     registrar_btn.bind("<Leave>", on_leave)
 
-    voltar_btn = ctk.CTkButton(frame, text="Voltar ↩️", command=voltar_login, width=250, corner_radius=8)
+    voltar_btn = ctk.CTkButton(frame, text="Voltar ⬅️", command=voltar_login, width=250, corner_radius=8)
     animate_slide_with_fade(voltar_btn, -300, 0, axis='x', delay=350, layout_args={'pady': 10})
 
     voltar_btn.bind("<Enter>", on_enter)
     voltar_btn.bind("<Leave>", on_leave)
 
     registro_window.mainloop()
-criar_banco_e_tabelas()
-abrir_login()
+
+if __name__ == "__main__":
+    abrir_login()
+    criar_banco_e_tabelas()
