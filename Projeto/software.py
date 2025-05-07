@@ -1450,4 +1450,3 @@ def abrir_registro():
 if __name__ == "__main__":
     criar_banco_e_tabelas()
     abrir_login()
-    
