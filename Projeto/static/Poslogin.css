@@ -55,7 +55,9 @@ h2{
     max-width:60px;
     margin-right: 0px;
 }
-
+.strong{
+    color: #FFF;
+}
 /* Menu lateral escuro */
 .offcanvas {
     background-color:#1B234C; /* Cor escura para o menu */

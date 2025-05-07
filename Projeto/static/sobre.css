@@ -20,6 +20,11 @@ body {
     color: #ffff;
 }
 
+b, strong {
+    font-weight: bolder;
+    color: #fff;
+
+}
 
 /* Ajuste para a imagem do logo */
 .imagem-sobreposta {
