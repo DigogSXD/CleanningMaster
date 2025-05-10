@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 app.secret_key = 'sua_chave_secreta_aqui'
 
-# Configurações do MySQL
+# Configurações do MySQL aa
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '12345678'
