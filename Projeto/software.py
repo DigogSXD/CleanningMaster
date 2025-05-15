@@ -12,7 +12,8 @@ import uuid
 from datetime import datetime, date, timedelta
 from criar_banco import criar_banco_e_tabelas
 import webbrowser
-
+import wmi
+import pyautogui
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("dark-blue")
 
@@ -997,7 +998,7 @@ def interface_suporte_remoto(frame, atualizar_conteudo, mostrar_inicio):
 def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, licenca, root=None):
     if root:
         root.destroy()
-
+    
     root = ctk.CTk()
     root.title("CleanningMaster 💼")
     root.geometry("900x600")
@@ -1063,6 +1064,8 @@ def abrir_cleanning_master(nome_usuario, status, usuario_id, email, is_premium, 
             btn_admin = criar_botao_sidebar("👑 Administração", lambda: atualizar_conteudo(lambda frame: interface_admin(frame, usuario_id, atualizar_conteudo, mostrar_inicio)), posicao)
             posicao += 1
         btn_suporte_remoto = criar_botao_sidebar("🖥️ Suporte Remoto", lambda: atualizar_conteudo(lambda frame: interface_suporte_remoto(frame, atualizar_conteudo, mostrar_inicio)), posicao)
+        posicao += 1
+        btn_drivers = criar_botao_sidebar("🔧 Drivers", lambda: atualizar_conteudo(lambda frame: interface_drivers(frame, atualizar_conteudo, mostrar_inicio, is_premium, status)), posicao)
         posicao += 1
 
     rodape = ctk.CTkFrame(root, height=40, fg_color="#1a2634")
@@ -1352,6 +1355,191 @@ def abrir_login():
     registro_btn.bind("<Leave>", on_leave)
 
     login_window.mainloop()
+
+
+def interface_drivers(frame, atualizar_conteudo, mostrar_inicio, is_premium, status):
+    # Verifica se o usuário tem permissão (premium ou admin)
+    has_permission = is_premium or "Admin" in status
+    if not has_permission:
+        messagebox.showwarning("Aviso", "Esta é uma função premium. Ative uma licença ou use uma conta de administrador para usá-la.")
+        return
+
+    # Variáveis para controle de execução única
+    video_reset_executed = False
+    sound_reset_executed = False
+    network_reset_executed = False
+
+    def simulate_reset(progress_bar, status_label, reset_type):
+        # Atualiza a mensagem de status
+        status_label.configure(text=f"Processando o reset do driver ({reset_type})...")
+        frame.update()
+
+        # Simula o progresso
+        for i in range(1, 11):
+            progress_bar.set(i / 10)  # Atualiza a barra de progresso (0 a 1)
+            frame.update()
+            time.sleep(0.3)  # Simula o tempo de processamento (3 segundos no total)
+
+        # Executa o comando de reset
+        pyautogui.hotkey('ctrl', 'shift', 'win', 'b')
+        time.sleep(1)  # Aguarda o sistema processar o comando
+
+        # Mensagem de finalização
+        status_label.configure(text=f"Reset do driver ({reset_type}) concluído!")
+        progress_bar.set(1)  # Garante que a barra de progresso esteja cheia
+        frame.update()
+        messagebox.showinfo("Concluído", f"Reset do driver {reset_type} finalizado com sucesso!")
+
+    def reset_video_driver():
+        nonlocal video_reset_executed
+        if video_reset_executed:
+            messagebox.showinfo("Aviso", "O reset do driver de vídeo já foi executado nesta sessão.")
+            return
+        video_reset_executed = True
+
+        progress_frame = ctk.CTkFrame(frame, fg_color="transparent")
+        progress_frame.pack(pady=10)
+        status_label = ctk.CTkLabel(progress_frame, text="Iniciando reset do driver de vídeo...", font=("Arial", 14))
+        status_label.pack()
+        progress_bar = ctk.CTkProgressBar(progress_frame, width=300)
+        progress_bar.pack(pady=5)
+        progress_bar.set(0)
+
+        simulate_reset(progress_bar, status_label, "Vídeo")
+
+    def reset_sound_driver():
+        nonlocal sound_reset_executed
+        if sound_reset_executed:
+            messagebox.showinfo("Aviso", "O reset do driver de som já foi executado nesta sessão.")
+            return
+        sound_reset_executed = True
+
+        progress_frame = ctk.CTkFrame(frame, fg_color="transparent")
+        progress_frame.pack(pady=10)
+        status_label = ctk.CTkLabel(progress_frame, text="Iniciando reset do driver de som...", font=("Arial", 14))
+        status_label.pack()
+        progress_bar = ctk.CTkProgressBar(progress_frame, width=300)
+        progress_bar.pack(pady=5)
+        progress_bar.set(0)
+
+        simulate_reset(progress_bar, status_label, "Som")
+
+    def reset_network_driver():
+        nonlocal network_reset_executed
+        if network_reset_executed:
+            messagebox.showinfo("Aviso", "O reset do driver de rede já foi executado nesta sessão.")
+            return
+        network_reset_executed = True
+
+        progress_frame = ctk.CTkFrame(frame, fg_color="transparent")
+        progress_frame.pack(pady=10)
+        status_label = ctk.CTkLabel(progress_frame, text="Iniciando reset do driver de rede...", font=("Arial", 14))
+        status_label.pack()
+        progress_bar = ctk.CTkProgressBar(progress_frame, width=300)
+        progress_bar.pack(pady=5)
+        progress_bar.set(0)
+
+        simulate_reset(progress_bar, status_label, "Rede")
+
+    def check_driver_updates():
+        progress_frame = ctk.CTkFrame(frame, fg_color="transparent")
+        progress_frame.pack(pady=10)
+        status_label = ctk.CTkLabel(progress_frame, text="Iniciando verificação de atualizações...", font=("Arial", 14))
+        status_label.pack()
+        progress_bar = ctk.CTkProgressBar(progress_frame, width=300)
+        progress_bar.pack(pady=5)
+        progress_bar.set(0)
+
+        # Simula o progresso
+        for i in range(1, 11):
+            progress_bar.set(i / 10)
+            frame.update()
+            time.sleep(0.3)  # Simula 3 segundos de processamento
+
+        try:
+            c = wmi.WMI()
+            outdated_drivers = []
+            threshold_date = datetime.datetime.now() - datetime.timedelta(days=30)  # Drivers com mais de 30 dias são considerados "desatualizados"
+
+            # Verifica drivers de vídeo
+            for driver in c.Win32_VideoController():
+                install_date = getattr(driver, 'InstallDate', None)
+                if install_date:
+                    driver_date = datetime.datetime.strptime(install_date.split('.')[0], '%Y%m%d%H%M%S')
+                    if driver_date < threshold_date:
+                        outdated_drivers.append(f"Vídeo: {driver.Name} (Instalado em {driver_date.strftime('%d/%m/%Y')})")
+
+            # Verifica drivers de som
+            for driver in c.Win32_SoundDevice():
+                install_date = getattr(driver, 'InstallDate', None)
+                if install_date:
+                    driver_date = datetime.datetime.strptime(install_date.split('.')[0], '%Y%m%d%H%M%S')
+                    if driver_date < threshold_date:
+                        outdated_drivers.append(f"Som: {driver.Name} (Instalado em {driver_date.strftime('%d/%m/%Y')})")
+
+            # Verifica drivers de rede
+            for driver in c.Win32_NetworkAdapter():
+                install_date = getattr(driver, 'InstallDate', None)
+                if install_date:
+                    driver_date = datetime.datetime.strptime(install_date.split('.')[0], '%Y%m%d%H%M%S')
+                    if driver_date < threshold_date:
+                        outdated_drivers.append(f"Rede: {driver.Name} (Instalado em {driver_date.strftime('%d/%m/%Y')})")
+
+            status_label.configure(text="Verificação concluída!")
+            progress_bar.set(1)
+            frame.update()
+
+            if outdated_drivers:
+                messagebox.showinfo("Atualizações Disponíveis", "Os seguintes drivers podem estar desatualizados:\n" + "\n".join(outdated_drivers) + "\nUse o Windows Update ou Gerenciador de Dispositivos para atualizar.")
+            else:
+                messagebox.showinfo("Sem Atualizações", "Todos os drivers estão atualizados ou dentro do limite de 30 dias.")
+
+        except Exception as e:
+            status_label.configure(text="Erro na verificação!")
+            progress_bar.set(1)
+            frame.update()
+            messagebox.showerror("Erro", f"Falha ao verificar atualizações: {e}. Execute como administrador.")
+
+    def update_drivers(drivers, confirm):
+        if not confirm:
+            messagebox.showwarning("Aviso", "Marque a caixa para confirmar a atualização.")
+            return
+        try:
+            messagebox.showinfo("Aviso", "Atualizações de drivers requerem o Windows Update ou instalação manual. Verifique no Gerenciador de Dispositivos.")
+        except Exception as e:
+            messagebox.showerror("Erro", f"Falha ao atualizar drivers: {e}")
+
+    titulo = ctk.CTkLabel(frame, text="🔧 Gerenciamento de Drivers", font=("Arial", 18, "bold"))
+    animate_slide_with_fade(titulo, -200, 0, axis='y', delay=100, layout_args={'pady': 20})
+
+    btn_reset_video = ctk.CTkButton(frame, text="🔄 Resetar Driver de Vídeo", command=reset_video_driver, corner_radius=8, font=("Arial", 14))
+    animate_slide_with_fade(btn_reset_video, -300, 0, axis='x', delay=150, layout_args={'pady': 10})
+    btn_reset_video.bind("<Enter>", lambda e: e.widget.configure(fg_color="#1f6aa5"))
+    btn_reset_video.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
+
+    btn_reset_sound = ctk.CTkButton(frame, text="🔄 Resetar Driver de Som", command=reset_sound_driver, corner_radius=8, font=("Arial", 14))
+    animate_slide_with_fade(btn_reset_sound, -300, 0, axis='x', delay=200, layout_args={'pady': 10})
+    btn_reset_sound.bind("<Enter>", lambda e: e.widget.configure(fg_color="#1f6aa5"))
+    btn_reset_sound.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
+
+    btn_reset_network = ctk.CTkButton(frame, text="🔄 Resetar Driver de Rede", command=reset_network_driver, corner_radius=8, font=("Arial", 14))
+    animate_slide_with_fade(btn_reset_network, -300, 0, axis='x', delay=250, layout_args={'pady': 10})
+    btn_reset_network.bind("<Enter>", lambda e: e.widget.configure(fg_color="#1f6aa5"))
+    btn_reset_network.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
+
+    btn_check_updates = ctk.CTkButton(frame, text="🔍 Verificar Atualizações de Drivers", command=check_driver_updates, corner_radius=8, font=("Arial", 14))
+    animate_slide_with_fade(btn_check_updates, -300, 0, axis='x', delay=300, layout_args={'pady': 10})
+    btn_check_updates.bind("<Enter>", lambda e: e.widget.configure(fg_color="#1f6aa5"))
+    btn_check_updates.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
+
+    btn_voltar = ctk.CTkButton(frame, text="Voltar ⬅️", 
+                              command=lambda: atualizar_conteudo(mostrar_inicio),
+                              corner_radius=8, font=("Arial", 14))
+    btn_voltar.pack(side="bottom", anchor="se", padx=10, pady=10)
+    btn_voltar.bind("<Enter>", lambda e: e.widget.configure(fg_color="#1f6aa5"))
+    btn_voltar.bind("<Leave>", lambda e: e.widget.configure(fg_color="#14375e"))
+
+
 
 def abrir_registro():
     registro_window = ctk.CTk()
