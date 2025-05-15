@@ -48,7 +48,7 @@ def criar_banco_e_tabelas():
                 chave VARCHAR(20) NOT NULL UNIQUE,
                 usada BOOLEAN DEFAULT FALSE,
                 ativa BOOLEAN DEFAULT TRUE,
-                tipo_licenca ENUM('30_dias', '90_dias', 'vitalicia') NOT NULL,
+                tipo_licenca ENUM('30 Dias', '90 Dias', 'Vitalícia') NOT NULL,
                 data_uso DATETIME DEFAULT NULL,
                 data_expiracao DATE DEFAULT NULL,
                 usuario_id INT DEFAULT NULL,
@@ -111,6 +111,3 @@ def criar_banco_e_tabelas():
         if conn and conn.is_connected():
             conn.close()
             print("Conexão com o banco de dados fechada.")
-
-# Executa a função
-criar_banco_e_tabelas()
